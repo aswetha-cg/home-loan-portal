@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Home Loans</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>BANK HOME LOANS</h1>
+    </header>
+
+    <main class="page-main">
+        <section class="hero">
+            <h2>Own Your Dream Home Today</h2>
+
+            <p>
+                Competitive Interest Rates | Flexible Loan Tenure |
+                Quick Processing
+            </p>
+
+            <div class="hero-buttons">
+                <button type="button" onclick="scrollToInquiry()">Check Eligibility</button>
+                <button type="button" onclick="scrollToInquiry()">Apply Now</button>
+            </div>
+            <p class="hero-note">AVA can guide you through eligibility, pre-approval, documents, and advisor support.</p>
+        </section>
+
+        <div class="section-grid">
+            <section id="inquiry" class="section inquiry-panel">
+                <h2>Start Your Home Loan Inquiry</h2>
+                <p>Share a few details and AVA will help you begin your journey.</p>
+
+                <form id="inquiry-form" onsubmit="handleInquiry(event)">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <input type="tel" name="phone" placeholder="Phone Number" required>
+                    <select name="loanType">
+                        <option value="Home Purchase">Home Purchase</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Renovation">Renovation</option>
+                        <option value="Balance Transfer">Balance Transfer</option>
+                    </select>
+                    <input type="number" name="amount" placeholder="Loan Amount" min="100000" step="50000">
+                    <textarea name="message" rows="2" placeholder="Tell AVA what you need help with"></textarea>
+                    <button type="submit">Talk to AVA</button>
+                </form>
+
+                <p id="ava-response" class="ava-response"></p>
+            </section>
+
+            <section class="section">
+                <h2>Available Loan Products</h2>
+                <div class="card-container">
+                    <div class="card"><h3>🏠 Home Purchase</h3><p>Buy a new home.</p></div>
+                    <div class="card"><h3>🏗 Construction</h3><p>Build your house.</p></div>
+                    <div class="card"><h3>🔨 Renovation</h3><p>Upgrade your home.</p></div>
+                    <div class="card"><h3>🔄 Balance Transfer</h3><p>Switch your loan.</p></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Eligibility</h2>
+                <div class="card-container">
+                    <div class="card"><h3>Salaried</h3><ul><li>Salary slips</li><li>PAN</li></ul></div>
+                    <div class="card"><h3>Business</h3><ul><li>IT returns</li><li>Financials</li></ul></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Required Documents</h2>
+                <ul>
+                    <li>Identity Proof</li>
+                    <li>Address Proof</li>
+                    <li>Income Proof</li>
+                    <li>Property Documents</li>
+                </ul>
+            </section>
+
+            <section class="section">
+                <h2>Home Loan Process</h2>
+                <ol>
+                    <li>Authentication</li>
+                    <li>Eligibility</li>
+                    <li>Documents</li>
+                    <li>Approval</li>
+                </ol>
+            </section>
+
+            <section class="section">
+                <h2>Loan Protection Insurance</h2>
+                <ul>
+                    <li>Financial Protection</li>
+                    <li>Family Security</li>
+                    <li>Critical Illness</li>
+                </ul>
+            </section>
+
+            <section class="section faq-panel">
+                <h2>Frequently Asked Questions</h2>
+                <details><summary>Apply online?</summary><p>Yes.</p></details>
+                <details><summary>CIBIL required?</summary><p>Credit review is part of eligibility.</p></details>
+                <details><summary>Transfer loan?</summary><p>Balance transfer may be available.</p></details>
+            </section>
+        </div>
+
+        <section class="assistance-section">
+            <h2>Need Assistance?</h2>
+            <p>AVA can help with pre-approval, loan protection insurance, and advisor handoff when needed.</p>
+            <button type="button" onclick="showAVAMessage()">Chat with AVA</button>
+        </section>
+    </main>
+
+    <button type="button" id="ava-bubble" class="ava-bubble" aria-label="Open AVA chat">
+        <span class="ava-bubble-icon">💬</span>
+        <span class="ava-bubble-label">AVA</span>
+    </button>
+
+    <div id="ava-chat-popup" class="ava-chat-popup" aria-hidden="true">
+        <div class="ava-chat-header">
+            <div>
+                <strong>AVA Assistant</strong>
+                <p>Home loan support</p>
+            </div>
+            <button type="button" id="close-ava-chat" class="close-chat-btn" aria-label="Close chat">×</button>
+        </div>
+        <div id="ava-chat-messages" class="ava-chat-messages">
+            <div class="message bot">Hi! I can help with home loan information, eligibility, pre-approval, documents, insurance, and advisor support.</div>
+        </div>
+        <form id="ava-chat-form" class="ava-chat-form">
+            <input type="text" id="ava-chat-input" placeholder="Ask AVA..." required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
