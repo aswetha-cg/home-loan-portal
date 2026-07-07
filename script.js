@@ -22,110 +22,56 @@ function handleInquiry(event) {
     }
 }
 
-function openAVAPopup() {
-    const popup = document.getElementById('ava-chat-popup');
-    const input = document.getElementById('ava-chat-input');
-
-    if (popup) {
-        popup.classList.add('show');
-        popup.setAttribute('aria-hidden', 'false');
-    }
-
-    if (input) {
-        input.focus();
-    }
+function loadGenesys() {
+    if (window._genesysLoaded || window.Genesys) return;
+    window._genesysLoaded = true;
+    (function (g, e, n, es, ys) {
+        g['_genesysJs'] = e;
+        g[e] = g[e] || function () {
+            (g[e].q = g[e].q || []).push(arguments)
+        };
+        g[e].t = 1 * new Date();
+        g[e].c = es;
+        ys = document.createElement('script'); ys.async = 1; ys.src = n; ys.charset = 'utf-8'; document.head.appendChild(ys);
+    })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
+        environment: 'prod-usw2',
+        deploymentId: 'c641aa60-6ebc-4aa9-8737-5eb53fe5358b'
+    });
 }
 
-function closeAVAPopup() {
-    const popup = document.getElementById('ava-chat-popup');
+function openGenesysChat() {
+    loadGenesys();
 
-    if (popup) {
-        popup.classList.remove('show');
-        popup.setAttribute('aria-hidden', 'true');
+    var tryOpen = function () {
+        if (window.Genesys) {
+            try {
+                if (typeof Genesys === 'function') {
+                    Genesys('webchat.open');
+                }
+            } catch (e) {}
+            return true;
+        }
+        return false;
+    };
+
+    if (!tryOpen()) {
+        var interval = setInterval(function () {
+            if (tryOpen()) {
+                clearInterval(interval);
+            }
+        }, 500);
+        setTimeout(function () { clearInterval(interval); }, 30000);
     }
-}
-
-function appendChatMessage(text, sender) {
-    const messages = document.getElementById('ava-chat-messages');
-
-    if (!messages) {
-        return;
-    }
-
-    const message = document.createElement('div');
-    message.className = `message ${sender}`;
-    message.textContent = text;
-    messages.appendChild(message);
-    messages.scrollTop = messages.scrollHeight;
-}
-
-function getAVAReply(userText) {
-    const text = userText.toLowerCase();
-
-    if (text.includes('eligibility') || text.includes('eligible')) {
-        return 'I can help with a quick eligibility check based on income, employment type, and credit profile.';
-    }
-
-    if ((text.includes('pre') && text.includes('approval')) || text.includes('approval')) {
-        return 'Pre-approval usually involves income proof, identity documents, and an initial credit review.';
-    }
-
-    if (text.includes('insurance')) {
-        return 'We can recommend loan protection insurance options that support your family and financial goals.';
-    }
-
-    if (text.includes('advisor') || text.includes('human') || text.includes('agent')) {
-        return 'I can connect you with a loan advisor for a more detailed discussion.';
-    }
-
-    if (text.includes('document')) {
-        return 'Common documents include ID proof, address proof, income proof, and property-related papers.';
-    }
-
-    return 'I can help with home loan information, eligibility, pre-approval, documents, insurance, and advisor support.';
-}
-
-function showAVAMessage() {
-    const response = document.getElementById('ava-response');
-
-    if (response) {
-        response.textContent = 'AVA is ready to assist you with home loan information, eligibility, and next steps.';
-    }
-
-    openAVAPopup();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('ava-chat-form');
-    const input = document.getElementById('ava-chat-input');
-    const closeButton = document.getElementById('close-ava-chat');
-    const bubbleButton = document.getElementById('ava-bubble');
-
-    if (bubbleButton) {
-        bubbleButton.addEventListener('click', function () {
-            openAVAPopup();
-        });
+    const inquiryForm = document.getElementById('inquiry-form');
+    if (inquiryForm) {
+        // keep the existing handler attached in HTML, nothing to do here
     }
 
-    if (form && input) {
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const userText = input.value.trim();
-
-            if (!userText) {
-                return;
-            }
-
-            appendChatMessage(userText, 'user');
-            input.value = '';
-
-            window.setTimeout(function () {
-                appendChatMessage(getAVAReply(userText), 'bot');
-            }, 400);
-        });
-    }
-
-    if (closeButton) {
-        closeButton.addEventListener('click', closeAVAPopup);
+    const assistButton = document.querySelector('.assistance-section button');
+    if (assistButton) {
+        assistButton.addEventListener('click', openGenesysChat);
     }
 });
