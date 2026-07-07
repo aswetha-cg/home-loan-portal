@@ -171,46 +171,21 @@
     <footer>
         <h3>Need Assistance?</h3>
         <p>AVA can help with pre-approval, loan protection insurance, and advisor handoff when needed.</p>
-        <button type="button" onclick="showAVAMessage()">Chat with AVA</button>
+        <button type="button" id="genesys-footer-btn">Chat with AVA</button>
     </footer>
 
-    <!--
-    <button type="button" id="ava-bubble" class="ava-bubble" aria-label="Open AVA chat">
-        <span class="ava-bubble-icon">💬</span>
-        <span class="ava-bubble-label">AVA</span>
-    </button>
-
-     <div id="ava-chat-popup" class="ava-chat-popup" aria-hidden="true">
-        <div class="ava-chat-header">
-            <div>
-                <strong>AVA Assistant</strong>
-                <p>Home loan support</p>
+    <div class="genesys-widget">
+        <div class="genesys-widget-card">
+            <div class="genesys-widget-header">
+                <h3>Welcome</h3>
+                <p>We're here to help</p>
             </div>
-            <button type="button" id="close-ava-chat" class="close-chat-btn" aria-label="Close chat">×</button>
+            <div class="genesys-widget-body">
+                <p>Start a conversation</p>
+                <button type="button" id="genesys-message-btn" class="genesys-widget-btn">▶ Message us</button>
+            </div>
         </div>
-        <div id="ava-chat-messages" class="ava-chat-messages">
-            <div class="message bot">Hi! I can help with home loan information, eligibility, pre-approval, documents, insurance, and advisor support.</div>
-        </div>
-        <form id="ava-chat-form" class="ava-chat-form">
-            <input type="text" id="ava-chat-input" placeholder="Ask AVA..." required>
-            <button type="submit">Send</button>
-        </form>
-    </div> 
-    -->
-    <script type="text/javascript" charset="utf-8">
-    (function (g, e, n, es, ys) {
-        g['_genesysJs'] = e;
-        g[e] = g[e] || function () {
-        (g[e].q = g[e].q || []).push(arguments)
-        };
-        g[e].t = 1 * new Date();
-        g[e].c = es;
-        ys = document.createElement('script'); ys.async = 1; ys.src = n; ys.charset = 'utf-8'; document.head.appendChild(ys);
-    })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
-    environment: 'prod-usw2',
-    deploymentId: 'c641aa60-6ebc-4aa9-8737-5eb53fe5358b'
-    });
-   </script>
+    </div>
     <script src="script.js"></script>
 
 </body>

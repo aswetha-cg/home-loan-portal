@@ -23,55 +23,75 @@ function handleInquiry(event) {
 }
 
 function loadGenesys() {
-    if (window._genesysLoaded || window.Genesys) return;
+    if (window._genesysLoaded) return;
     window._genesysLoaded = true;
-    (function (g, e, n, es, ys) {
-        g['_genesysJs'] = e;
-        g[e] = g[e] || function () {
-            (g[e].q = g[e].q || []).push(arguments)
+
+    if (!window.Genesys) {
+        window.Genesys = function () {
+            (window.Genesys.q = window.Genesys.q || []).push(arguments);
         };
-        g[e].t = 1 * new Date();
-        g[e].c = es;
-        ys = document.createElement('script'); ys.async = 1; ys.src = n; ys.charset = 'utf-8'; document.head.appendChild(ys);
-    })(window, 'Genesys', 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js', {
+    }
+
+    window.Genesys.t = 1 * new Date();
+    window.Genesys.c = {
         environment: 'prod-usw2',
         deploymentId: 'c641aa60-6ebc-4aa9-8737-5eb53fe5358b'
-    });
+    };
+
+    var script = document.createElement('script');
+    script.async = true;
+    script.charset = 'utf-8';
+    script.src = 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js';
+    document.head.appendChild(script);
+}
+
+function tryGenesysOpen() {
+    if (typeof Genesys !== 'function') return false;
+
+    try {
+        Genesys('webchat.open');
+        return true;
+    } catch (e) {}
+
+    try {
+        Genesys('command', 'webchat.open');
+        return true;
+    } catch (e) {}
+
+    try {
+        Genesys('webchat', 'open');
+        return true;
+    } catch (e) {}
+
+    return false;
 }
 
 function openGenesysChat() {
     loadGenesys();
 
-    var tryOpen = function () {
-        if (window.Genesys) {
-            try {
-                if (typeof Genesys === 'function') {
-                    Genesys('webchat.open');
-                }
-            } catch (e) {}
-            return true;
-        }
-        return false;
-    };
-
-    if (!tryOpen()) {
-        var interval = setInterval(function () {
-            if (tryOpen()) {
-                clearInterval(interval);
-            }
-        }, 500);
-        setTimeout(function () { clearInterval(interval); }, 30000);
+    if (tryGenesysOpen()) {
+        return;
     }
+
+    var attempt = 0;
+    var interval = setInterval(function () {
+        attempt += 1;
+        if (tryGenesysOpen() || attempt >= 12) {
+            clearInterval(interval);
+        }
+    }, 500);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const inquiryForm = document.getElementById('inquiry-form');
-    if (inquiryForm) {
-        // keep the existing handler attached in HTML, nothing to do here
+    loadGenesys();
+
+    const footerBtn = document.getElementById('genesys-footer-btn');
+    if (footerBtn) {
+        footerBtn.addEventListener('click', openGenesysChat);
     }
 
-    const assistButton = document.querySelector('.assistance-section button');
-    if (assistButton) {
-        assistButton.addEventListener('click', openGenesysChat);
+    const messageBtn = document.getElementById('genesys-message-btn');
+    if (messageBtn) {
+        messageBtn.addEventListener('click', openGenesysChat);
     }
 });
