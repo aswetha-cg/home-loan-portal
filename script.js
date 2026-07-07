@@ -60,38 +60,10 @@ function openGenesysChat() {
     }, 500);
 }
 
-function showGenesysDebug(message) {
-    console.log('[Genesys Debug] ' + message);
-    var debug = document.getElementById('genesys-debug');
-    if (!debug) {
-        debug = document.createElement('div');
-        debug.id = 'genesys-debug';
-        debug.style.position = 'fixed';
-        debug.style.left = '16px';
-        debug.style.bottom = '16px';
-        debug.style.padding = '10px 14px';
-        debug.style.background = 'rgba(0,0,0,0.7)';
-        debug.style.color = 'white';
-        debug.style.fontSize = '12px';
-        debug.style.zIndex = '10000';
-        document.body.appendChild(debug);
-    }
-    debug.textContent = message;
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     const footerBtn = document.getElementById('genesys-footer-btn');
     if (footerBtn) {
         footerBtn.addEventListener('click', function () {
-            showGenesysDebug('Footer button clicked');
-            openGenesysChat();
-        });
-    }
-
-    const messageBtn = document.getElementById('genesys-message-btn');
-    if (messageBtn) {
-        messageBtn.addEventListener('click', function () {
-            showGenesysDebug('Message us clicked');
             openGenesysChat();
         });
     }
