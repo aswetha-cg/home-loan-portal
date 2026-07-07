@@ -22,53 +22,31 @@ function handleInquiry(event) {
     }
 }
 
-function loadGenesys() {
-    if (window._genesysLoaded) return;
-    window._genesysLoaded = true;
-
-    if (!window.Genesys) {
-        window.Genesys = function () {
-            (window.Genesys.q = window.Genesys.q || []).push(arguments);
-        };
-    }
-
-    window.Genesys.t = 1 * new Date();
-    window.Genesys.c = {
-        environment: 'prod-usw2',
-        deploymentId: 'c641aa60-6ebc-4aa9-8737-5eb53fe5358b'
-    };
-
-    var script = document.createElement('script');
-    script.async = true;
-    script.charset = 'utf-8';
-    script.src = 'https://apps.usw2.pure.cloud/genesys-bootstrap/genesys.min.js';
-    document.head.appendChild(script);
-}
-
 function tryGenesysOpen() {
     if (typeof Genesys !== 'function') return false;
 
-    try {
-        Genesys('webchat.open');
-        return true;
-    } catch (e) {}
+    var commands = [
+        ['webchat.open'],
+        ['command', 'webchat.open'],
+        ['webchat', 'open'],
+        ['webchat.start'],
+        ['command', 'webchat.start'],
+        ['webchat', 'start']
+    ];
 
-    try {
-        Genesys('command', 'webchat.open');
-        return true;
-    } catch (e) {}
-
-    try {
-        Genesys('webchat', 'open');
-        return true;
-    } catch (e) {}
+    for (var i = 0; i < commands.length; i += 1) {
+        try {
+            Genesys.apply(null, commands[i]);
+            return true;
+        } catch (e) {
+            // ignore and try next
+        }
+    }
 
     return false;
 }
 
 function openGenesysChat() {
-    loadGenesys();
-
     if (tryGenesysOpen()) {
         return;
     }
@@ -82,16 +60,39 @@ function openGenesysChat() {
     }, 500);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    loadGenesys();
+function showGenesysDebug(message) {
+    console.log('[Genesys Debug] ' + message);
+    var debug = document.getElementById('genesys-debug');
+    if (!debug) {
+        debug = document.createElement('div');
+        debug.id = 'genesys-debug';
+        debug.style.position = 'fixed';
+        debug.style.left = '16px';
+        debug.style.bottom = '16px';
+        debug.style.padding = '10px 14px';
+        debug.style.background = 'rgba(0,0,0,0.7)';
+        debug.style.color = 'white';
+        debug.style.fontSize = '12px';
+        debug.style.zIndex = '10000';
+        document.body.appendChild(debug);
+    }
+    debug.textContent = message;
+}
 
+document.addEventListener('DOMContentLoaded', function () {
     const footerBtn = document.getElementById('genesys-footer-btn');
     if (footerBtn) {
-        footerBtn.addEventListener('click', openGenesysChat);
+        footerBtn.addEventListener('click', function () {
+            showGenesysDebug('Footer button clicked');
+            openGenesysChat();
+        });
     }
 
     const messageBtn = document.getElementById('genesys-message-btn');
     if (messageBtn) {
-        messageBtn.addEventListener('click', openGenesysChat);
+        messageBtn.addEventListener('click', function () {
+            showGenesysDebug('Message us clicked');
+            openGenesysChat();
+        });
     }
 });
